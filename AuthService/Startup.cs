@@ -1,4 +1,6 @@
 ﻿using AuthService.Database;
+using AuthService.Entities;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity;
+using Pomelo;
+using System;
 
 namespace AuthService
 {
@@ -24,12 +28,14 @@ namespace AuthService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string dbConnectionString = Configuration
+            var dbConnectionString = Configuration
             .GetSection(nameof(AppSecrets))
             .Get<AppSecrets>()
             .ConnectionStrings.DbConnectionString;
 
-            services.AddDbContext<AppDbContext>(config => config.UseSqlServer(dbConnectionString));
+            services.AddDbContext<AppDbContext>(config => config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version())));
+
+            services.AddIdentityCore<UserEntity>().AddEntityFrameworkStores<AppDbContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
