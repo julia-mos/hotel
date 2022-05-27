@@ -26,6 +26,13 @@ namespace AuthService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string dbConnectionString = Configuration
+            .GetSection(nameof(AppSecrets))
+            .Get<AppSecrets>()
+            .ConnectionStrings.DbConnectionString;
+
+            services.AddDbContext<AppDbContext>(config => config.UseSqlServer(dbConnectionString));
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
