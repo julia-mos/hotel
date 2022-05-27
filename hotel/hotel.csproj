@@ -13,5 +13,9 @@
   <ItemGroup>
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <None Remove="docker-compose.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="docker-compose.yml" />
   </ItemGroup>
 </Project>
