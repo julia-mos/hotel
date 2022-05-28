@@ -11,8 +11,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Pomelo;
 using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AuthService
 {
@@ -35,7 +38,33 @@ namespace AuthService
 
             services.AddDbContext<AppDbContext>(config => config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version())));
 
-            services.AddIdentityCore<UserEntity>().AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services
+                .AddIdentityCore<UserEntity>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            string secret = Configuration.GetSection(nameof(AppSecrets))
+                    .Get<AppSecrets>()
+                    .JWT.Secret;
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                    };
+                }); ;
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

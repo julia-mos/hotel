@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AuthService.Database;
 using AuthService.Entities;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Controllers
 {
@@ -63,6 +66,43 @@ namespace AuthService.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseEntity { Status = StatusEnum.Error.ToString(), Message = "Cannot register. Check details and try again." });
 
             return Ok(new ResponseEntity { Status = StatusEnum.Success.ToString(), Message = "User created successfully!" });
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        {
+            UserEntity user = await _userManager.FindByNameAsync(model.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                JwtSecurityToken token = GenerateToken();
+
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo
+                });
+            }
+            return Unauthorized();
+        }
+
+        private JwtSecurityToken GenerateToken()
+        {
+
+            var secret = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    _configuration.GetSection(nameof(AppSecrets))
+                    .Get<AppSecrets>()
+                    .JWT.Secret)
+                );
+
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: new SigningCredentials(secret, SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
         }
     }
 }
