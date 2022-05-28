@@ -35,7 +35,7 @@ namespace AuthService
 
             services.AddDbContext<AppDbContext>(config => config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version())));
 
-            services.AddIdentityCore<UserEntity>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddIdentityCore<UserEntity>().AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
