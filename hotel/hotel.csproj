@@ -18,11 +18,16 @@
     <None Remove="docker-compose.yml" />
     <None Remove="Microsoft.Extensions.Configuration.UserSecrets" />
     <None Remove="Database\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="docker-compose.yml" />
+    <None Remove="Controllers\" />
+    <None Remove="Middlewares\" />
+    <None Remove="Helpers\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Middlewares\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

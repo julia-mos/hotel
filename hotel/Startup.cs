@@ -12,6 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using hotel.Helpers;
+using hotel.Interfaces;
+using hotel.Middlewares;
 
 namespace hotel
 {
@@ -32,6 +35,8 @@ namespace hotel
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "hotel", Version = "v1" });
             });
+
+            services.AddSingleton<ITokenHelper, TokenHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +54,8 @@ namespace hotel
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<AuthMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

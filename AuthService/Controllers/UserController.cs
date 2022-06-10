@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AuthService.Database;
@@ -75,7 +76,7 @@ namespace AuthService.Controllers
             UserEntity user = await _userManager.FindByNameAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                JwtSecurityToken token = GenerateToken();
+                JwtSecurityToken token = GenerateToken(user.Id);
 
                 return Ok(new
                 {
@@ -86,7 +87,7 @@ namespace AuthService.Controllers
             return Unauthorized();
         }
 
-        private JwtSecurityToken GenerateToken()
+        private JwtSecurityToken GenerateToken(string userID)
         {
 
             var secret = new SymmetricSecurityKey(
@@ -98,6 +99,7 @@ namespace AuthService.Controllers
 
 
             var token = new JwtSecurityToken(
+                claims: new[] { new Claim("id", userID) },
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: new SigningCredentials(secret, SecurityAlgorithms.HmacSha256)
                 );
