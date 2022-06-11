@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using hotel.Entities;
 using hotel.Helpers;
 using hotel.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -35,9 +36,9 @@ namespace hotel.Middlewares
         {
             try
             {
-                var UserId = _tokenHelper.ValidateJwtToken(token);
-                Console.WriteLine(UserId);
-                context.Items["UserId"] = UserId;
+                JwtUserEntity user = _tokenHelper.ValidateJwtToken(token);
+                context.Items["UserId"] = user.UserId;
+                context.Items["roles"] = user.roles;
             }
             catch
             {

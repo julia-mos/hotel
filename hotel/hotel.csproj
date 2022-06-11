@@ -22,6 +22,7 @@
     <None Remove="Middlewares\" />
     <None Remove="Helpers\" />
     <None Remove="Interfaces\" />
+    <None Remove="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
@@ -29,5 +30,6 @@
     <Folder Include="Middlewares\" />
     <Folder Include="Helpers\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
+using hotel.Entities;
 using hotel.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +16,25 @@ namespace hotel.Helpers
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
+        private readonly List<string> roles;
+        public AuthorizeAttribute(string Roles) : base()
+        {
+            roles = Roles.Split(",").ToList();
+        }
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var UserId = context.HttpContext.Items["UserId"];
+            List<string> userRoles = context.HttpContext.Items["roles"] as List<string>;
+
+            if (roles.Count > 0)
+            {
+                bool hasRole = userRoles.Any(x => roles.Any(y => y == x));
+
+                if(!hasRole)
+                    context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }
+
             if (UserId == null)
             {
                 // not logged in
@@ -35,7 +53,7 @@ namespace hotel.Helpers
         }
 
 
-        public string? ValidateJwtToken(string token)
+        public JwtUserEntity? ValidateJwtToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -58,9 +76,9 @@ namespace hotel.Helpers
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 string UserId = jwtToken.Claims.First(x => x.Type == "id").Value;
-                Console.WriteLine(UserId);
+                List<string> roles = jwtToken.Claims.First(x => x.Type == "roles").Value.Split(",").ToList();
 
-                return UserId;
+                return new JwtUserEntity(UserId, roles);
             }
             catch (Exception error)
             {

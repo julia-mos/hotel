@@ -76,7 +76,9 @@ namespace AuthService.Controllers
             UserEntity user = await _userManager.FindByNameAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                JwtSecurityToken token = GenerateToken(user.Id);
+                IList<string> userRoles = await _userManager.GetRolesAsync(user);
+
+                JwtSecurityToken token = GenerateToken(user.Id, String.Join(",", userRoles.ToArray()));
 
                 return Ok(new
                 {
@@ -87,7 +89,7 @@ namespace AuthService.Controllers
             return Unauthorized();
         }
 
-        private JwtSecurityToken GenerateToken(string userID)
+        private JwtSecurityToken GenerateToken(string userID, string userRoles)
         {
 
             var secret = new SymmetricSecurityKey(
@@ -99,7 +101,7 @@ namespace AuthService.Controllers
 
 
             var token = new JwtSecurityToken(
-                claims: new[] { new Claim("id", userID) },
+                claims: new[] { new Claim("id", userID), new Claim("roles", userRoles) },
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: new SigningCredentials(secret, SecurityAlgorithms.HmacSha256)
                 );

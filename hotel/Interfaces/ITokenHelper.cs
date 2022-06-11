@@ -1,8 +1,10 @@
 ﻿using System;
+using hotel.Entities;
+
 namespace hotel.Interfaces
 {
     public interface ITokenHelper
     {
-        string? ValidateJwtToken(string token);
+        JwtUserEntity? ValidateJwtToken(string token);
     }
 }
