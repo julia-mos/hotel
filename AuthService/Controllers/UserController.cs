@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AuthService.Database;
 using AuthService.Entities;
 using AuthService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +39,7 @@ namespace AuthService.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IEnumerable<UserEntity>> Get()
         {
             return await _dbContext.Users.ToArrayAsync();
@@ -62,6 +64,8 @@ namespace AuthService.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
+
+            await _userManager.AddToRoleAsync(user, "User");
 
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseEntity { Status = StatusEnum.Error.ToString(), Message = "Cannot register. Check details and try again." });

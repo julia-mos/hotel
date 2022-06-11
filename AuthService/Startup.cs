@@ -16,6 +16,7 @@ using Pomelo;
 using System;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AuthService
 {
@@ -74,7 +75,7 @@ namespace AuthService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -93,6 +94,77 @@ namespace AuthService
             {
                 endpoints.MapControllers();
             });
+
+            CreateRoles(serviceProvider);
+            CreateAdmin(serviceProvider);
+        }
+
+        private void CreateRoles(IServiceProvider serviceProvider)
+        {
+
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            Task<IdentityResult> roleResult;
+
+            Task<bool> hasAdminRole = roleManager.RoleExistsAsync("Administrator");
+            hasAdminRole.Wait();
+
+            if (!hasAdminRole.Result)
+            {
+                roleResult = roleManager.CreateAsync(new IdentityRole("Administrator"));
+                roleResult.Wait();
+            }
+
+            Task<bool> hasUserRole = roleManager.RoleExistsAsync("User");
+            hasUserRole.Wait();
+
+            if (!hasUserRole.Result)
+            {
+                roleResult = roleManager.CreateAsync(new IdentityRole("User"));
+                roleResult.Wait();
+            }
+
+            Task<bool> hasDeletedRole = roleManager.RoleExistsAsync("Deleted");
+            hasDeletedRole.Wait();
+
+            if (!hasDeletedRole.Result)
+            {
+                roleResult = roleManager.CreateAsync(new IdentityRole("Deleted"));
+                roleResult.Wait();
+            }
+        }
+
+        private void CreateAdmin(IServiceProvider serviceProvider)
+        {
+            Task<IdentityResult> addAdminResult;
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<UserEntity>>();
+
+            Task<UserEntity> adminExists = userManager.FindByNameAsync("admin@houserent.pl");
+            adminExists.Wait();
+
+            if(adminExists.Result == null)
+            {
+                UserEntity admin = new()
+                {
+                    Email = "admin@houserent.pl",
+                    UserName = "admin@houserent.pl",
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                };
+
+
+                addAdminResult = userManager.CreateAsync(admin, "zaq1@WSX");
+                addAdminResult.Wait();
+
+                addAdminResult = userManager.AddToRoleAsync(admin, "Administrator");
+                addAdminResult.Wait();
+               
+
+                if (!addAdminResult.IsCompletedSuccessfully)
+                    Console.WriteLine("Couldn't create default admin account");
+            }
+
         }
     }
 }
