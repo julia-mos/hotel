@@ -96,12 +96,7 @@ namespace AuthService.Controllers
         private JwtSecurityToken GenerateToken(string userID, string userRoles)
         {
 
-            var secret = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    _configuration.GetSection(nameof(AppSecrets))
-                    .Get<AppSecrets>()
-                    .JWT.Secret)
-                );
+            var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")));
 
 
             var token = new JwtSecurityToken(

@@ -7,7 +7,7 @@ namespace hotel.Controllers
 {
     [ApiController]
     [Route("/")]
-    [Authorize("Admin,User")]
+    [Authorize("Administrator,User")]
     public class TestController : ControllerBase
     {
 

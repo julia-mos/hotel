@@ -32,10 +32,7 @@ namespace AuthService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnectionString = Configuration
-            .GetSection(nameof(AppSecrets))
-            .Get<AppSecrets>()
-            .ConnectionStrings.DbConnectionString;
+            var dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 
             services.AddDbContext<AppDbContext>(config => config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version())));
 
@@ -45,9 +42,7 @@ namespace AuthService
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            string secret = Configuration.GetSection(nameof(AppSecrets))
-                    .Get<AppSecrets>()
-                    .JWT.Secret;
+            string secret = Environment.GetEnvironmentVariable("JWT_SECRET");
 
             services
                 .AddAuthentication(options =>
@@ -77,6 +72,12 @@ namespace AuthService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

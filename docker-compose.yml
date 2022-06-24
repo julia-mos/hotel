@@ -1,0 +1,39 @@
+services:
+  main:
+    build:
+      context: ..
+      dockerfile: ./hotel/main/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - mysql
+  authservice:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/AuthService/Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    platform: linux/x86_64
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hotel
+    ports:
+      - "3308:3306"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: hotel-rabbit
+    volumes:
+      - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - 5672:5672
+      - 15672:15672

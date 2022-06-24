@@ -1,12 +1,8 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using hotel.Entities;
-using hotel.Helpers;
 using hotel.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 
 namespace hotel.Middlewares
 {

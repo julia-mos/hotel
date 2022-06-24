@@ -27,7 +27,7 @@ namespace hotel.Helpers
             var UserId = context.HttpContext.Items["UserId"];
             List<string> userRoles = context.HttpContext.Items["roles"] as List<string>;
 
-            if (roles.Count > 0)
+            if (roles.Count > 0 && userRoles != null && userRoles.Count > 0)
             {
                 bool hasRole = userRoles.Any(x => roles.Any(y => y == x));
 
@@ -35,7 +35,7 @@ namespace hotel.Helpers
                     context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
 
-            if (UserId == null)
+            if (UserId == null || (roles.Count > 0 && userRoles.Count == 0))
             {
                 // not logged in
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
@@ -57,9 +57,7 @@ namespace hotel.Helpers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            string secret = _configuration.GetSection(nameof(AppSecrets))
-                   .Get<AppSecrets>()
-                   .JWT.Secret;
+            string secret = Environment.GetEnvironmentVariable("JWT_SECRET");
 
             Console.WriteLine(secret);
 
