@@ -7,4 +7,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="AuthService\" />
+    <None Remove="RoomService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AuthService\" />
+    <Folder Include="RoomService\" />
+  </ItemGroup>
 </Project>

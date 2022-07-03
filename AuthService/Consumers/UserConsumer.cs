@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthService.Database;
+using AppDbContext;
 using Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
@@ -11,11 +11,11 @@ namespace AuthService.Consumers
 {
     public class UserConsumer : IConsumer<UserListEntity>
     {
-        private readonly AppDbContext _dbContext;
+        private readonly DatabaseContext _dbContext;
         private readonly UserManager<UserEntity> _userManager;
 
 
-        public UserConsumer(AppDbContext dbContext, UserManager<UserEntity> userManager)
+        public UserConsumer(DatabaseContext dbContext, UserManager<UserEntity> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;

@@ -5,17 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Microsoft.Extensions.Identity.Core" />
     <None Remove="Microsoft.AspNetCore.Identity" />
     <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
-    <None Remove="AuthService\" />
-    <None Remove="RoomService\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="AuthService\" />
-    <Folder Include="RoomService\" />
+    <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>
 </Project>

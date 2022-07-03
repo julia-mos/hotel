@@ -1,5 +1,4 @@
-﻿using AuthService.Database;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +14,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using AuthService.Consumers;
 using Entities;
+using AppDbContext;
 
 namespace AuthService
 {
@@ -32,14 +32,22 @@ namespace AuthService
         {
             var dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 
-            services.AddDbContext<AppDbContext>(config => {
-                config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version(5, 7)), provider => provider.EnableRetryOnFailure());
+            services.AddDbContext<DatabaseContext>(config => {
+                config.UseMySql(
+                    dbConnectionString,
+                    new MySqlServerVersion(new Version(5, 7)),
+                    provider => {
+                        provider.EnableRetryOnFailure();
+                        provider.MigrationsAssembly("Migrations");
+                    });
             });
+
+            
 
             services
                 .AddIdentityCore<UserEntity>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
+                .AddEntityFrameworkStores<DatabaseContext>()
                 .AddDefaultTokenProviders();
 
             string secret = Environment.GetEnvironmentVariable("JWT_SECRET");
@@ -82,7 +90,6 @@ namespace AuthService
             services.AddMassTransitHostedService();
 
 
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -93,12 +100,6 @@ namespace AuthService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.Migrate();
-            }
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

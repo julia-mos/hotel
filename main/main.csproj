@@ -19,6 +19,10 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.4" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.1.4" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +41,7 @@
     <None Remove="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
     <None Remove="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <None Remove="MassTransit.Extensions.DependencyInjection" />
+    <None Remove="Microsoft.EntityFrameworkCore.Design" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />

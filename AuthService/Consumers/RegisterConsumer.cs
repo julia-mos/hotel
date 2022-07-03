@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AuthService.Database;
+using AppDbContext;
 using Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +13,10 @@ namespace AuthService.Consumers
 {
     public class RegisterConsumer : IConsumer<RegisterModel>
     {
-        private readonly AppDbContext _dbContext;
+        private readonly DatabaseContext _dbContext;
         private readonly UserManager<UserEntity> _userManager;
 
-        public RegisterConsumer(AppDbContext dbContext, UserManager<UserEntity> userManager)
+        public RegisterConsumer(DatabaseContext dbContext, UserManager<UserEntity> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;

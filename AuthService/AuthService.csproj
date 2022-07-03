@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <None Remove="Microsoft.Extensions.Configuration.UserSecrets" />
-    <None Remove="Database\" />
     <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <None Remove="Entities\" />
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
@@ -35,7 +34,6 @@
     <None Remove="MassTransit" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Database\" />
     <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +41,12 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\AppDbContext\AppDbContext.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Migrations\Migrations.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
