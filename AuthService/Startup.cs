@@ -1,10 +1,6 @@
 ﻿using AuthService.Database;
-using AuthService.Entities;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,11 +8,13 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Pomelo;
 using System;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
+using MassTransit;
+using AuthService.Consumers;
+using Entities;
 
 namespace AuthService
 {
@@ -34,7 +32,9 @@ namespace AuthService
         {
             var dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 
-            services.AddDbContext<AppDbContext>(config => config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version())));
+            services.AddDbContext<AppDbContext>(config => {
+                config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version(5, 7)), provider => provider.EnableRetryOnFailure());
+            });
 
             services
                 .AddIdentityCore<UserEntity>()
@@ -61,6 +61,27 @@ namespace AuthService
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
                     };
                 }); ;
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<UserConsumer>();
+                x.AddConsumer<LoginConsumer>();
+                x.AddConsumer<RegisterConsumer>();
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+                {
+                    config.UseHealthCheck(provider);
+                    config.Host(new Uri(Environment.GetEnvironmentVariable("RABBIT_HOSTNAME")), h =>
+                    {
+                        h.Username(Environment.GetEnvironmentVariable("RABBIT_USER"));
+                        h.Password(Environment.GetEnvironmentVariable("RABBIT_PASSWORD"));
+                    });
+                    config.ConfigureEndpoints(provider);
+                }));
+            });
+
+            services.AddMassTransitHostedService();
+
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -147,15 +168,15 @@ namespace AuthService
             {
                 UserEntity admin = new()
                 {
-                    Email = "admin@houserent.pl",
-                    UserName = "admin@houserent.pl",
+                    Email = Environment.GetEnvironmentVariable("DEFAULT_ADMIN_MAIL"),
+                    UserName = Environment.GetEnvironmentVariable("DEFAULT_ADMIN_MAIL"),
                     SecurityStamp = Guid.NewGuid().ToString(),
                     FirstName = "Admin",
                     LastName = "Admin",
                 };
 
 
-                addAdminResult = userManager.CreateAsync(admin, "zaq1@WSX");
+                addAdminResult = userManager.CreateAsync(admin, Environment.GetEnvironmentVariable("DEFAULT_ADMIN_PASSWORD"));
                 addAdminResult.Wait();
 
                 addAdminResult = userManager.AddToRoleAsync(admin, "Administrator");

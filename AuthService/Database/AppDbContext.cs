@@ -1,8 +1,8 @@
-﻿using AuthService.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
+using Entities;
 
 namespace AuthService.Database
 {

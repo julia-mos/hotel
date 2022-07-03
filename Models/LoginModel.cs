@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AuthService.Models
+namespace Models
 {
     public class LoginModel
     {

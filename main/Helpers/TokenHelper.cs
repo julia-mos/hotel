@@ -17,6 +17,12 @@ namespace hotel.Helpers
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
         private readonly List<string> roles;
+
+        public AuthorizeAttribute() : base()
+        {
+            roles = new List<string>() { };
+        }
+
         public AuthorizeAttribute(string Roles) : base()
         {
             roles = Roles.Split(",").ToList();
@@ -58,9 +64,6 @@ namespace hotel.Helpers
             var tokenHandler = new JwtSecurityTokenHandler();
 
             string secret = Environment.GetEnvironmentVariable("JWT_SECRET");
-
-            Console.WriteLine(secret);
-
 
             try
             {

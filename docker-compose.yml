@@ -1,22 +1,4 @@
 services:
-  main:
-    build:
-      context: ..
-      dockerfile: ./hotel/main/Dockerfile
-    ports:
-      - "8000:80"
-    depends_on:
-      - mysql
-  authservice:
-    env_file:
-      - .env
-    build:
-      context: ..
-      dockerfile: ./hotel/AuthService/Dockerfile
-    ports:
-      - "3001:80"
-    depends_on:
-      - mysql
   mysql:
     image: mysql:5.7
     platform: linux/x86_64
@@ -34,6 +16,33 @@ services:
       - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
       - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
       - ./rabbitmq/logs:/var/log/rabbitmq/log
+    environment:
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASSWORD}
     ports:
       - 5672:5672
       - 15672:15672
+
+  authservice:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/AuthService/Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - mysql
+      - rabbitmq
+
+  main:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/main/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - mysql
+      - rabbitmq
+      - authservice

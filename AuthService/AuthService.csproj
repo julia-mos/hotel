@@ -16,6 +16,9 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.4" />
+    <PackageReference Include="MassTransit" Version="7.1.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,12 +29,21 @@
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
-    <None Remove="Models\" />
     <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <None Remove="MassTransit.AspNetCore" />
+    <None Remove="MassTransit.RabbitMQ" />
+    <None Remove="MassTransit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
     <Folder Include="Entities\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

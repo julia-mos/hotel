@@ -1,9 +1,10 @@
-﻿using System;
-namespace AuthService.Entities
+﻿using System.Net;
+
+namespace Entities
 {
     public class ResponseEntity
     {
-        public string Status { get; set; }
+        public HttpStatusCode Code { get; set; }
         public string Message { get; set; }
     }
 }

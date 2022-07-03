@@ -11,6 +11,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.6" />
+    <PackageReference Include="MassTransit" Version="7.1.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.4" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.4" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +32,16 @@
     <None Remove="Helpers\" />
     <None Remove="Interfaces\" />
     <None Remove="Entities\" />
+    <None Remove="RabbitMQ.Client" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="MassTransit" />
+    <None Remove="MassTransit.RabbitMQ" />
+    <None Remove="MediatR" />
+    <None Remove="MassTransit.AspNetCore" />
+    <None Remove="RabbitMQ.Client.Core.DependencyInjection" />
+    <None Remove="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
+    <None Remove="Microsoft.Extensions.Diagnostics.HealthChecks" />
+    <None Remove="MassTransit.Extensions.DependencyInjection" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
@@ -32,5 +50,16 @@
     <Folder Include="Helpers\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Entities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\AuthService\AuthService.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

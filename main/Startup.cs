@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 //using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+
 using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
 using hotel.Helpers;
 using hotel.Interfaces;
 using hotel.Middlewares;
+using MassTransit;
+using Entities;
+using Models;
+using System.Collections.Generic;
 
 namespace hotel
 {
@@ -30,6 +30,26 @@ namespace hotel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMassTransit(x =>
+            {
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+                {
+                    config.UseHealthCheck(provider);
+                    config.Host(new Uri(Environment.GetEnvironmentVariable("RABBIT_HOSTNAME")), h =>
+                    {
+                        h.Username(Environment.GetEnvironmentVariable("RABBIT_USER"));
+                        h.Password(Environment.GetEnvironmentVariable("RABBIT_PASSWORD"));
+                    });
+                    config.ConfigureEndpoints(provider);
+                }));
+                x.AddRequestClient<UserListEntity>();
+                x.AddRequestClient<RegisterModel>();
+                x.AddRequestClient<LoginModel>();
+
+            });
+
+            services.AddMassTransitHostedService();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
