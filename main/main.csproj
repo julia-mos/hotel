@@ -27,11 +27,6 @@
     <None Remove="docker-compose.yml" />
     <None Remove="Microsoft.Extensions.Configuration.UserSecrets" />
     <None Remove="Database\" />
-    <None Remove="Controllers\" />
-    <None Remove="Middlewares\" />
-    <None Remove="Helpers\" />
-    <None Remove="Interfaces\" />
-    <None Remove="Entities\" />
     <None Remove="RabbitMQ.Client" />
     <None Remove="Newtonsoft.Json" />
     <None Remove="MassTransit" />
@@ -45,11 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Middlewares\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entities\Entities.csproj">

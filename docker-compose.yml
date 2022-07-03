@@ -28,8 +28,15 @@ services:
     build:
       context: ..
       dockerfile: ./hotel/AuthService/Dockerfile
-    ports:
-      - "3001:80"
+    depends_on:
+      - mysql
+      - rabbitmq
+  roomservice:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/RoomService/Dockerfile
     depends_on:
       - mysql
       - rabbitmq
