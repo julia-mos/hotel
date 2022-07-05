@@ -36,6 +36,8 @@ namespace RoomService
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<CreateRoomConsumer>();
+                x.AddConsumer<GetRoomConsumer>();
+
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
                     config.UseHealthCheck(provider);

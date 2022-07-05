@@ -42,10 +42,15 @@ namespace hotel
                     });
                     config.ConfigureEndpoints(provider);
                 }));
+
+                // user clients
                 x.AddRequestClient<UserListEntity>();
                 x.AddRequestClient<RegisterModel>();
                 x.AddRequestClient<LoginModel>();
 
+                // room clients
+                x.AddRequestClient<RoomListEntity>();
+                x.AddRequestClient<CreateRoomModel>();
             });
 
             services.AddMassTransitHostedService();
