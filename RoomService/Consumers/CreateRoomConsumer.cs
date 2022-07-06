@@ -5,6 +5,7 @@ using AppDbContext;
 using Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Models;
 
 namespace RoomService.Consumers
@@ -12,10 +13,12 @@ namespace RoomService.Consumers
     public class CreateRoomConsumer : IConsumer<CreateRoomModel>
     {
         private readonly DatabaseContext _dbContext;
+        private readonly ILogger<CreateRoomConsumer> _logger;
 
-        public CreateRoomConsumer(DatabaseContext dbContext)
+        public CreateRoomConsumer(ILogger<CreateRoomConsumer> logger, DatabaseContext dbContext)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task Consume(ConsumeContext<CreateRoomModel> context)
@@ -41,8 +44,10 @@ namespace RoomService.Consumers
                         Message = "Room created successfully!"
                     });
             }
-            catch
+            catch (Exception exc)
             {
+                _logger.LogError(exc.Message);
+
                 await context.RespondAsync(
                 new ResponseEntity
                 {

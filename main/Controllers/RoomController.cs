@@ -13,31 +13,49 @@ namespace hotel.Controllers
 {
     [ApiController]
     [Route("/api/rooms")]
-    //[Authorize("Administrator,User")]
     public class RoomController : ControllerBase
     {
         readonly IRequestClient<CreateRoomModel> _createRoomClient;
         readonly IRequestClient<RoomListEntity> _getRoomClient;
+        readonly IRequestClient<DeleteRoomModel> _deleteRoomClient;
 
-        public RoomController(IRequestClient<CreateRoomModel> createRoomClient, IRequestClient<RoomListEntity> getRoomClient)
+        public RoomController(IRequestClient<CreateRoomModel> createRoomClient, IRequestClient<RoomListEntity> getRoomClient, IRequestClient<DeleteRoomModel> deleteRoomClient)
         {
             _createRoomClient = createRoomClient;
             _getRoomClient = getRoomClient;
+            _deleteRoomClient = deleteRoomClient;
         }
 
         [HttpPost]
         [Authorize("Administrator")]
-        public async Task<IActionResult> CreateRoomAsync([FromBody] CreateRoomModel room)
+        public async Task<IActionResult> CreateRoom([FromBody] CreateRoomModel room)
         {
             var response = await _createRoomClient.GetResponse<ResponseEntity>(room);
 
             return StatusCode((int)response.Message.Code, response.Message.Message);
         }
 
+        [HttpDelete]
+        [Authorize("Administrator")]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteRoom(int id)
+        {
+            var response = await _deleteRoomClient.GetResponse<ResponseEntity>(new DeleteRoomModel() { Id = id});
+
+            return StatusCode((int)response.Message.Code, response.Message.Message);
+        }
+
         [HttpGet]
-        public async Task<IActionResult> GetRoom()
+        [Route("{id?}")]
+        public async Task<IActionResult> GetRoom(int? id = null)
         {
             RoomListEntity request = new RoomListEntity() { rooms= new List<RoomEntity>() { }};
+
+            if(id != null)
+            {
+                request.rooms.Add(new RoomEntity(){ Id = (int)id });
+            }
+
 
             var response = await _getRoomClient.GetResponse<RoomEntity[], ResponseEntity>(request);
 
@@ -48,7 +66,7 @@ namespace hotel.Controllers
             }
             else if (response.Is(out Response<ResponseEntity> errorResponse))
             {
-                return StatusCode((int)errorResponse.Message.Code, roomsFound.Message);
+                return StatusCode((int)errorResponse.Message.Code, errorResponse.Message.Message);
             }
 
             return StatusCode((int)HttpStatusCode.InternalServerError, "");

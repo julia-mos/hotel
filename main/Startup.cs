@@ -51,6 +51,7 @@ namespace hotel
                 // room clients
                 x.AddRequestClient<RoomListEntity>();
                 x.AddRequestClient<CreateRoomModel>();
+                x.AddRequestClient<DeleteRoomModel>();
             });
 
             services.AddMassTransitHostedService();
