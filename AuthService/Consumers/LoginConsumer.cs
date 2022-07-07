@@ -29,7 +29,7 @@ namespace AuthService.Consumers
         public async Task Consume(ConsumeContext<LoginModel> context)
         {
             UserEntity user = await _userManager.FindByNameAsync(context.Message.Email);
-            if (user != null && await _userManager.CheckPasswordAsync(user, context.Message.Password))
+            if (user != null && !user.Deleted && await _userManager.CheckPasswordAsync(user, context.Message.Password))
             {
                 IList<string> userRoles = await _userManager.GetRolesAsync(user);
 

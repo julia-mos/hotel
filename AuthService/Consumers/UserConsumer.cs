@@ -25,7 +25,7 @@ namespace AuthService.Consumers
         {
             if(context.Message.users==null || context.Message.users.Count == 0)
             {
-                var users = await _dbContext.Users.ToArrayAsync();
+                var users = await _dbContext.Users.Where(x=>!x.Deleted).ToArrayAsync();
 
                 await context.RespondAsync(users);
             }
@@ -33,7 +33,7 @@ namespace AuthService.Consumers
             {
                 var users = await _dbContext.Users.ToListAsync();
 
-                var response = users.Where(x => context.Message.users.Exists(z => z.Id == x.Id)).ToArray();
+                var response = users.Where(x => context.Message.users.Exists(z => z.Id == x.Id) && !x.Deleted).ToArray();
 
                 await context.RespondAsync(response);
             }

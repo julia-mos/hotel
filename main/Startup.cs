@@ -47,6 +47,7 @@ namespace hotel
                 x.AddRequestClient<UserListEntity>();
                 x.AddRequestClient<RegisterModel>();
                 x.AddRequestClient<LoginModel>();
+                x.AddRequestClient<DeleteUserModel>();
 
                 // room clients
                 x.AddRequestClient<RoomListEntity>();

@@ -75,6 +75,8 @@ namespace AuthService
                 x.AddConsumer<UserConsumer>();
                 x.AddConsumer<LoginConsumer>();
                 x.AddConsumer<RegisterConsumer>();
+                x.AddConsumer<DeleteUserConsumer>();
+
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
                     config.UseHealthCheck(provider);

@@ -15,5 +15,7 @@ namespace Entities
         [MinLength(3)]
         [MaxLength(100)]
         public string LastName { get; set; }
+
+        public bool Deleted { get; set; } = false;
     }
 }

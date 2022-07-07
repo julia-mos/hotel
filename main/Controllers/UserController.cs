@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Entities;
 using hotel.Helpers;
@@ -18,12 +19,19 @@ namespace hotel.Controllers
         readonly IRequestClient<UserListEntity> _userClient;
         readonly IRequestClient<RegisterModel> _registerClient;
         readonly IRequestClient<LoginModel> _loginClient;
+        readonly IRequestClient<DeleteUserModel> _deleteClient;
 
-        public UserController(IRequestClient<UserListEntity> userClient, IRequestClient<RegisterModel> registerClient, IRequestClient<LoginModel> loginClient)
+        public UserController(
+            IRequestClient<UserListEntity> userClient,
+            IRequestClient<RegisterModel> registerClient,
+            IRequestClient<LoginModel> loginClient,
+             IRequestClient<DeleteUserModel> deleteClient
+        )
         {
             _userClient = userClient;
             _registerClient = registerClient;
             _loginClient = loginClient;
+            _deleteClient = deleteClient;
         }
 
         [HttpPost]
@@ -80,6 +88,23 @@ namespace hotel.Controllers
             var response = await _userClient.GetResponse<UserEntity[]>(request);
 
             return StatusCode(200, response.Message);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize()]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            List<string> userRoles = HttpContext.Items["roles"] as List<string>;
+
+            if ((string)HttpContext.Items["UserId"] != id && userRoles.Contains("Admin"))
+            {
+                return StatusCode((int)HttpStatusCode.Unauthorized, "Unauthorized");
+            }
+
+            var response = await _deleteClient.GetResponse<ResponseEntity>(new DeleteUserModel() { Id = id});
+
+            return StatusCode((int)response.Message.Code, response.Message.Message);
         }
     }
 }
