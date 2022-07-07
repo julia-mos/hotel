@@ -26,7 +26,7 @@ namespace RoomService.Consumers
         {
             try
             {
-                var room = await _dbContext.Rooms.Where(x => x.Id == context.Message.Id).FirstOrDefaultAsync();
+                var room = await _dbContext.Rooms.Where(x => x.Id == context.Message.Id && !x.Deleted).FirstOrDefaultAsync();
 
                 if(room == null)
                 {

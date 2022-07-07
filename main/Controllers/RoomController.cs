@@ -18,12 +18,19 @@ namespace hotel.Controllers
         readonly IRequestClient<CreateRoomModel> _createRoomClient;
         readonly IRequestClient<RoomListEntity> _getRoomClient;
         readonly IRequestClient<DeleteRoomModel> _deleteRoomClient;
+        readonly IRequestClient<UpdateRoomModel> _updateRoomClient;
 
-        public RoomController(IRequestClient<CreateRoomModel> createRoomClient, IRequestClient<RoomListEntity> getRoomClient, IRequestClient<DeleteRoomModel> deleteRoomClient)
+        public RoomController(
+            IRequestClient<CreateRoomModel> createRoomClient,
+            IRequestClient<RoomListEntity> getRoomClient,
+            IRequestClient<DeleteRoomModel> deleteRoomClient,
+            IRequestClient<UpdateRoomModel> updateRoomClient
+        )
         {
             _createRoomClient = createRoomClient;
             _getRoomClient = getRoomClient;
             _deleteRoomClient = deleteRoomClient;
+            _updateRoomClient = updateRoomClient;
         }
 
         [HttpPost]
@@ -31,16 +38,6 @@ namespace hotel.Controllers
         public async Task<IActionResult> CreateRoom([FromBody] CreateRoomModel room)
         {
             var response = await _createRoomClient.GetResponse<ResponseEntity>(room);
-
-            return StatusCode((int)response.Message.Code, response.Message.Message);
-        }
-
-        [HttpDelete]
-        [Authorize("Administrator")]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteRoom(int id)
-        {
-            var response = await _deleteRoomClient.GetResponse<ResponseEntity>(new DeleteRoomModel() { Id = id});
 
             return StatusCode((int)response.Message.Code, response.Message.Message);
         }
@@ -70,6 +67,28 @@ namespace hotel.Controllers
             }
 
             return StatusCode((int)HttpStatusCode.InternalServerError, "");
+        }
+
+        [HttpPut]
+        [Authorize("Administrator")]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateRoom(int id, [FromBody] UpdateRoomModel roomModel)
+        {
+            roomModel.Id = id;
+
+            var response = await _updateRoomClient.GetResponse<ResponseEntity>(roomModel);
+
+            return StatusCode((int)response.Message.Code, response.Message.Message);
+        }
+
+        [HttpDelete]
+        [Authorize("Administrator")]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteRoom(int id)
+        {
+            var response = await _deleteRoomClient.GetResponse<ResponseEntity>(new DeleteRoomModel() { Id = id });
+
+            return StatusCode((int)response.Message.Code, response.Message.Message);
         }
     }
 }

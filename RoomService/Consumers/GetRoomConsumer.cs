@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -25,34 +26,21 @@ namespace RoomService.Consumers
         {
             try
             {
-                if (context.Message.rooms == null || context.Message.rooms.Count == 0)
+                var response = await FindRoomAsync(context.Message.rooms);
+
+                if(response.Count() == 0 && context.Message.rooms.Count() > 0)
                 {
-                    var rooms = await _dbContext.Rooms.Where(x=>!x.Deleted).ToArrayAsync();
-
-                    await context.RespondAsync(rooms);
-
-                    return;
-                }
-                else
-                {
-                    var rooms = await _dbContext.Rooms.ToListAsync();
-
-                    var response = rooms.Where(x => context.Message.rooms.Exists(z => z.Id == x.Id) && !x.Deleted).ToArray();
-
-                    if(response.Count() == 0)
-                    {
-                        await context.RespondAsync(
+                    await context.RespondAsync(
                         new ResponseEntity
                         {
                             Code = HttpStatusCode.NotFound,
                             Message = "Room not found"
                         });
 
-                        return;
-                    }
-
-                    await context.RespondAsync(response);
+                    return;
                 }
+
+                await context.RespondAsync(response);
 
             }
             catch (Exception exc)
@@ -65,6 +53,24 @@ namespace RoomService.Consumers
                     Code = HttpStatusCode.BadRequest,
                     Message = "Something went wrong"
                 });
+            }
+        }
+
+        public async Task<RoomEntity[]> FindRoomAsync(List<RoomEntity> rooms)
+        {
+            if (rooms == null || rooms.Count == 0)
+            {
+                var response = await _dbContext.Rooms.Where(x => !x.Deleted).ToArrayAsync();
+
+                return response;
+            }
+            else
+            {
+                var roomsList = await _dbContext.Rooms.ToListAsync();
+
+                var response = roomsList.Where(x => rooms.Exists(z => z.Id == x.Id) && !x.Deleted).ToArray();
+
+                return response;
             }
         }
     }

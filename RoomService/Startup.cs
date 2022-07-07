@@ -38,6 +38,7 @@ namespace RoomService
                 x.AddConsumer<CreateRoomConsumer>();
                 x.AddConsumer<GetRoomConsumer>();
                 x.AddConsumer<DeleteRoomConsumer>();
+                x.AddConsumer<UpdateRoomConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {

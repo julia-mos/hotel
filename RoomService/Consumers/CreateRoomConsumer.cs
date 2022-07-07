@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AppDbContext;
 using Entities;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 
