@@ -9,6 +9,7 @@
     <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <None Remove="AuthService\" />
     <None Remove="RoomService\" />
+    <None Remove="MediaService\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -17,5 +18,6 @@
   <ItemGroup>
     <Folder Include="AuthService\" />
     <Folder Include="RoomService\" />
+    <Folder Include="MediaService\" />
   </ItemGroup>
 </Project>
