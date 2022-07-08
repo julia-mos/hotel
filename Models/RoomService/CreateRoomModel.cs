@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Models
 {
@@ -22,5 +24,7 @@ namespace Models
         [Required]
         [Range(1, 199999.99)]
         public decimal PriceForNight { get; set; }
+
+        public List<MediaEntity> Files { get; set; }
     }
 }

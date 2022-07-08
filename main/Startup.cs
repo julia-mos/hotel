@@ -15,6 +15,9 @@ using MassTransit;
 using Entities;
 using Models;
 using System.Collections.Generic;
+using AppDbContext;
+using Microsoft.EntityFrameworkCore;
+using main.Controllers;
 
 namespace hotel
 {
@@ -30,6 +33,12 @@ namespace hotel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+
+            services.AddDbContext<DatabaseContext>(config => {
+                config.UseMySql(dbConnectionString, new MySqlServerVersion(new Version(5, 7)), provider => provider.EnableRetryOnFailure());
+            });
+
             services.AddMassTransit(x =>
             {
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
@@ -65,6 +74,7 @@ namespace hotel
             });
 
             services.AddSingleton<ITokenHelper, TokenHelper>();
+            services.AddSingleton<IMediaController, MediaController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,8 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Entities;
 using hotel.Helpers;
+using hotel.Interfaces;
 using MassTransit;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -19,24 +20,38 @@ namespace hotel.Controllers
         readonly IRequestClient<RoomListEntity> _getRoomClient;
         readonly IRequestClient<DeleteRoomModel> _deleteRoomClient;
         readonly IRequestClient<UpdateRoomModel> _updateRoomClient;
+        readonly IMediaController _mediaController;
+
 
         public RoomController(
             IRequestClient<CreateRoomModel> createRoomClient,
             IRequestClient<RoomListEntity> getRoomClient,
             IRequestClient<DeleteRoomModel> deleteRoomClient,
-            IRequestClient<UpdateRoomModel> updateRoomClient
+            IRequestClient<UpdateRoomModel> updateRoomClient,
+            IMediaController mediaController
         )
         {
             _createRoomClient = createRoomClient;
             _getRoomClient = getRoomClient;
             _deleteRoomClient = deleteRoomClient;
             _updateRoomClient = updateRoomClient;
+            _mediaController = mediaController;
         }
 
         [HttpPost]
         [Authorize("Administrator")]
-        public async Task<IActionResult> CreateRoom([FromBody] CreateRoomModel room)
+        public async Task<IActionResult> CreateRoom([FromForm] CreateRoomModel room, IFormFileCollection files)
         {
+            List<MediaEntity> uploadedFiles = new List<MediaEntity>();
+
+            if(files.Count > 0)
+            {
+                foreach (var file in files)
+                {
+                    uploadedFiles.Add(await _mediaController.UploadFileAsync(file));
+                }
+            }
+
             var response = await _createRoomClient.GetResponse<ResponseEntity>(room);
 
             return StatusCode((int)response.Message.Code, response.Message.Message);

@@ -29,7 +29,8 @@ namespace RoomService.Consumers
                     Name = context.Message.Name,
                     Description = context.Message.Description,
                     NoOfPeople = context.Message.NoOfPeople,
-                    PriceForNight = context.Message.PriceForNight
+                    PriceForNight = context.Message.PriceForNight,
+                    Photos = context.Message.Files
                 };
 
                 await _dbContext.AddAsync(room);

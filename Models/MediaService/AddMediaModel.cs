@@ -5,6 +5,6 @@ namespace Models
 {
     public class AddMediaModel
     {
-        public IFormFile file { get; set; }
+        public IFormFile File { get; set; }
     }
 }

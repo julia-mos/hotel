@@ -1,3 +1,7 @@
+volumes:
+  uploads:
+
+
 services:
   mysql:
     image: mysql:5.7
@@ -42,16 +46,6 @@ services:
       - mysql
       - rabbitmq
 
-  mediaservice:
-    env_file:
-      - .env
-    build:
-      context: ..
-      dockerfile: ./hotel/MediaService/Dockerfile
-    depends_on:
-      - mysql
-      - rabbitmq
-
   main:
     env_file:
       - .env
@@ -60,9 +54,10 @@ services:
       dockerfile: ./hotel/main/Dockerfile
     ports:
       - "8000:80"
+    volumes:
+      - uploads:/app/Uploads
     depends_on:
       - mysql
       - rabbitmq
       - authservice
       - roomservice
-      - mediaservice
