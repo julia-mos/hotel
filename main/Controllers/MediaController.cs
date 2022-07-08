@@ -1,16 +1,22 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using AppDbContext;
 using Entities;
 using hotel.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace main.Controllers
 {
-    public class MediaController : IMediaController
+    [ApiController]
+    [Route("/api/uploads")]
+    public class MediaController : ControllerBase, IMediaController
     {
         private readonly DatabaseContext _dbContext;
         private readonly ILogger<MediaController> _logger;
@@ -31,7 +37,7 @@ namespace main.Controllers
 
                 var fileName = Guid.NewGuid().ToString();
 
-                var dbPath = Path.Combine(folderName, $"{fileName}{ext}");
+                var dbPath = Path.GetFullPath(Path.Combine(folderName, $"{fileName}{ext}"));
 
                 using (var stream = new FileStream(dbPath, FileMode.Create))
                 {
@@ -57,6 +63,15 @@ namespace main.Controllers
                 return null;
             }
 
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult> GetPhotoAsync(string id)
+        {
+            var file = await _dbContext.Media.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            return PhysicalFile(file.Path, "image/jpeg");
         }
     }
 }
