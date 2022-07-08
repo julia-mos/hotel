@@ -31,12 +31,23 @@ services:
     depends_on:
       - mysql
       - rabbitmq
+
   roomservice:
     env_file:
       - .env
     build:
       context: ..
       dockerfile: ./hotel/RoomService/Dockerfile
+    depends_on:
+      - mysql
+      - rabbitmq
+
+  mediaservice:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/MediaService/Dockerfile
     depends_on:
       - mysql
       - rabbitmq
@@ -53,3 +64,5 @@ services:
       - mysql
       - rabbitmq
       - authservice
+      - roomservice
+      - mediaservice
