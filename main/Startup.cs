@@ -68,6 +68,7 @@ namespace hotel
                 //booking clients
                 x.AddRequestClient<GetFreeRoomsModel>();
                 x.AddRequestClient<MakeBookingModel>();
+                x.AddRequestClient<BookingListModel>();
 
             });
 

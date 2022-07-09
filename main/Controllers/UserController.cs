@@ -100,7 +100,7 @@ namespace hotel.Controllers
         {
             List<string> userRoles = HttpContext.Items["roles"] as List<string>;
 
-            if ((string)HttpContext.Items["UserId"] != id && userRoles.Contains("Admin"))
+            if ((string)HttpContext.Items["UserId"] != id || !userRoles.Contains("Administrator"))
             {
                 return StatusCode((int)HttpStatusCode.Unauthorized, "Unauthorized");
             }

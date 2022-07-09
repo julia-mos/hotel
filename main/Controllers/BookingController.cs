@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -18,17 +19,21 @@ namespace main.Controllers
     {
         readonly IRequestClient<GetFreeRoomsModel> _freeRoomsClient;
         readonly IRequestClient<MakeBookingModel> _makeBookingClient;
+        readonly IRequestClient<BookingListModel> _getBookingClient;
+
         readonly ILogger<BookingController> _logger;
 
         public BookingController(
             IRequestClient<GetFreeRoomsModel> freeRoomsClient,
             ILogger<BookingController> logger,
-            IRequestClient<MakeBookingModel> makeBookingClient
+            IRequestClient<MakeBookingModel> makeBookingClient,
+            IRequestClient<BookingListModel> getBookingClient
             )
         {
             _freeRoomsClient = freeRoomsClient;
             _logger = logger;
             _makeBookingClient = makeBookingClient;
+            _getBookingClient = getBookingClient;
         }
 
         [HttpGet]
@@ -39,6 +44,9 @@ namespace main.Controllers
             {
                 DateTime dateFromParsed = DateTime.ParseExact(dateFrom, "yyyyMMdd", CultureInfo.InvariantCulture);
                 DateTime dateToParsed = DateTime.ParseExact(dateTo, "yyyyMMdd", CultureInfo.InvariantCulture);
+
+                if (dateFromParsed >= dateToParsed)
+                    return StatusCode(400, "Date from can't be later than date to");
 
                 dateFromParsed = dateFromParsed.AddHours(15);
                 dateToParsed = dateToParsed.AddHours(11);
@@ -69,8 +77,12 @@ namespace main.Controllers
                 DateTime dateFromParsed = DateTime.ParseExact(dateFrom, "yyyyMMdd", CultureInfo.InvariantCulture);
                 DateTime dateToParsed = DateTime.ParseExact(dateTo, "yyyyMMdd", CultureInfo.InvariantCulture);
 
+                if(dateFromParsed >= dateToParsed)
+                    return StatusCode(400, "Date from can't be later than date to");
+
                 dateFromParsed = dateFromParsed.AddHours(15);
                 dateToParsed = dateToParsed.AddHours(11);
+
 
                 var request = new MakeBookingModel() {
                     DateFrom = dateFromParsed,
@@ -94,5 +106,35 @@ namespace main.Controllers
 
         }
 
+
+        [HttpGet]
+        [Authorize()]
+        public async Task<IActionResult> GetBookings()
+        {
+            try
+            {
+                BookingListModel request = new BookingListModel() { bookings = new List<BookingEntity>() { } };
+
+                List<string> userRoles = HttpContext.Items["roles"] as List<string>;
+
+                if (!userRoles.Contains("Administrator"))
+                {
+                    request.userId = (string)HttpContext.Items["UserId"];
+                }
+
+
+                var response = await _getBookingClient.GetResponse<BookingEntity[]>(request);
+
+                return StatusCode(200, response.Message);
+
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc.Message);
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Error while reading data");
+            }
+
+        }
     }
 }
