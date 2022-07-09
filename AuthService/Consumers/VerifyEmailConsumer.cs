@@ -28,6 +28,17 @@ namespace AuthService.Consumers
         {
             UserEntity user = await _userManager.FindByIdAsync(context.Message.Id);
 
+            if(user == null)
+            {
+                await context.RespondAsync(
+                                new ResponseEntity
+                                {
+                                    Code = HttpStatusCode.NotFound,
+                                    Message = "User not found"
+                                });
+                return;
+            }
+
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, Encoding.UTF8.GetString(Convert.FromBase64String(context.Message.token)));
 
             if (result.Succeeded)

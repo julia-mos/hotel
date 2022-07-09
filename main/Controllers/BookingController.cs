@@ -19,7 +19,7 @@ namespace main.Controllers
     {
         readonly IRequestClient<GetFreeRoomsModel> _freeRoomsClient;
         readonly IRequestClient<MakeBookingModel> _makeBookingClient;
-        readonly IRequestClient<BookingListModel> _getBookingClient;
+        readonly IRequestClient<GetBookingsModel> _getBookingClient;
 
         readonly ILogger<BookingController> _logger;
 
@@ -27,7 +27,7 @@ namespace main.Controllers
             IRequestClient<GetFreeRoomsModel> freeRoomsClient,
             ILogger<BookingController> logger,
             IRequestClient<MakeBookingModel> makeBookingClient,
-            IRequestClient<BookingListModel> getBookingClient
+            IRequestClient<GetBookingsModel> getBookingClient
             )
         {
             _freeRoomsClient = freeRoomsClient;
@@ -113,7 +113,7 @@ namespace main.Controllers
         {
             try
             {
-                BookingListModel request = new BookingListModel() { bookings = new List<BookingEntity>() { } };
+                GetBookingsModel request = new GetBookingsModel() {};
 
                 List<string> userRoles = HttpContext.Items["roles"] as List<string>;
 

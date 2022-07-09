@@ -37,6 +37,7 @@ namespace BookingService
             {
                 x.AddConsumer<GetFreeRoomsConsumer>();
                 x.AddConsumer<MakeBookingConsumer>();
+                x.AddConsumer<GetBookingConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {

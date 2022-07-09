@@ -4,10 +4,9 @@ using Entities;
 
 namespace Models
 {
-    public class BookingListModel
+    public class GetBookingsModel
 
     {
-        public List<BookingEntity> bookings { get; set; }
         public string userId { get; set; }
     }
 }
