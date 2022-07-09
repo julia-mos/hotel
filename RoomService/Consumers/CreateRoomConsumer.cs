@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AppDbContext;
 using Entities;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 
@@ -24,12 +26,26 @@ namespace RoomService.Consumers
         {
             try
             {
+                bool roomExists = (await _dbContext.Rooms.Where(x => x.Name == context.Message.Name).FirstOrDefaultAsync()) != null;
+
+                if (roomExists)
+                {
+                    await context.RespondAsync(
+                    new ResponseEntity
+                    {
+                        Code = HttpStatusCode.BadRequest,
+                        Message = "Room with this name already exists"
+                    });
+                    return;
+                }
+
                 RoomEntity room = new()
                 {
                     Name = context.Message.Name,
                     Description = context.Message.Description,
                     NoOfPeople = context.Message.NoOfPeople,
                     PriceForNight = context.Message.PriceForNight,
+                    Count = context.Message.Count,
                     Photos = context.Message.Files
                 };
 

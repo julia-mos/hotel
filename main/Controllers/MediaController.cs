@@ -52,9 +52,7 @@ namespace main.Controllers
 
                 var dbFile = await _dbContext.Media.AddAsync(dbFileModel);
 
-                await _dbContext.SaveChangesAsync();
-
-                return dbFile.Entity;
+                return dbFileModel;
             }
             catch (Exception ex)
             {

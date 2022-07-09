@@ -17,7 +17,7 @@ namespace hotel.Controllers
     public class RoomController : ControllerBase
     {
         readonly IRequestClient<CreateRoomModel> _createRoomClient;
-        readonly IRequestClient<RoomListEntity> _getRoomClient;
+        readonly IRequestClient<RoomListModel> _getRoomClient;
         readonly IRequestClient<DeleteRoomModel> _deleteRoomClient;
         readonly IRequestClient<UpdateRoomModel> _updateRoomClient;
         readonly IMediaController _mediaController;
@@ -25,7 +25,7 @@ namespace hotel.Controllers
 
         public RoomController(
             IRequestClient<CreateRoomModel> createRoomClient,
-            IRequestClient<RoomListEntity> getRoomClient,
+            IRequestClient<RoomListModel> getRoomClient,
             IRequestClient<DeleteRoomModel> deleteRoomClient,
             IRequestClient<UpdateRoomModel> updateRoomClient,
             IMediaController mediaController
@@ -52,6 +52,8 @@ namespace hotel.Controllers
                 }
             }
 
+            room.Files = uploadedFiles;
+
             var response = await _createRoomClient.GetResponse<ResponseEntity>(room);
 
             return StatusCode((int)response.Message.Code, response.Message.Message);
@@ -61,18 +63,18 @@ namespace hotel.Controllers
         [Route("{id?}")]
         public async Task<IActionResult> GetRoom(int? id = null)
         {
-            RoomListEntity request = new RoomListEntity() { rooms= new List<RoomEntity>() { }};
+            RoomListModel request = new RoomListModel() { rooms= new List<GetRoomModel>() { }};
 
             if(id != null)
             {
-                request.rooms.Add(new RoomEntity(){ Id = (int)id });
+                request.rooms.Add(new GetRoomModel(){ Id = (int)id });
             }
 
 
-            var response = await _getRoomClient.GetResponse<RoomEntity[], ResponseEntity>(request);
+            var response = await _getRoomClient.GetResponse<GetRoomModel[], ResponseEntity>(request);
 
 
-            if (response.Is(out Response<RoomEntity[]> roomsFound))
+            if (response.Is(out Response<GetRoomModel[]> roomsFound))
             {
                 return StatusCode((int)HttpStatusCode.OK, roomsFound.Message);
             }

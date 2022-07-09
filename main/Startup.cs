@@ -60,7 +60,7 @@ namespace hotel
                 x.AddRequestClient<VerifyEmailModel>();
 
                 // room clients
-                x.AddRequestClient<RoomListEntity>();
+                x.AddRequestClient<RoomListModel>();
                 x.AddRequestClient<CreateRoomModel>();
                 x.AddRequestClient<DeleteRoomModel>();
                 x.AddRequestClient<UpdateRoomModel>();

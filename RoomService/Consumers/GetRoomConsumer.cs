@@ -8,10 +8,11 @@ using Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models;
 
 namespace RoomService.Consumers
 {
-    public class GetRoomConsumer : IConsumer<RoomListEntity>
+    public class GetRoomConsumer : IConsumer<RoomListModel>
     {
         private readonly DatabaseContext _dbContext;
         private readonly ILogger<GetRoomConsumer> _logger;
@@ -22,7 +23,7 @@ namespace RoomService.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<RoomListEntity> context)
+        public async Task Consume(ConsumeContext<RoomListModel> context)
         {
             try
             {
@@ -56,21 +57,43 @@ namespace RoomService.Consumers
             }
         }
 
-        public async Task<RoomEntity[]> FindRoomAsync(List<RoomEntity> rooms)
+        public async Task<GetRoomModel[]> FindRoomAsync(List<GetRoomModel> rooms)
         {
             if (rooms == null || rooms.Count == 0)
             {
-                var response = await _dbContext.Rooms.Where(x => !x.Deleted).ToArrayAsync();
+                var response = await _dbContext
+                    .Rooms
+                    .Where(x => !x.Deleted)
+                    .Include(x=>x.Photos)
+                    .Select(x=> new GetRoomModel() {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        Count = x.Count,
+                        Photos = x.Photos.Select(x=>x.Id).ToList()
+                    })
+                    .ToArrayAsync();
 
                 return response;
             }
             else
             {
-                var roomsList = await _dbContext.Rooms.ToListAsync();
+                var roomsList = await
+                    _dbContext
+                    .Rooms
+                    .Include(x=>x.Photos)
+                    .Where(x=>!x.Deleted && rooms.Exists(z => z.Id == x.Id))
+                    .Select(x => new GetRoomModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        Count = x.Count,
+                        Photos = x.Photos.Select(x => x.Id).ToList()
+                    })
+                    .ToArrayAsync();
 
-                var response = roomsList.Where(x => rooms.Exists(z => z.Id == x.Id) && !x.Deleted).ToArray();
-
-                return response;
+                return roomsList;
             }
         }
     }
