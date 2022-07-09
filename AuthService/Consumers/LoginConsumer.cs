@@ -19,22 +19,17 @@ namespace AuthService.Consumers
     {
         private readonly DatabaseContext _dbContext;
         private readonly UserManager<UserEntity> _userManager;
-        private readonly IRequestClient<SendMailModel> _mailSender;
 
-        public LoginConsumer(DatabaseContext dbContext, UserManager<UserEntity> userManager, IRequestClient<SendMailModel> mailSender)
+        public LoginConsumer(DatabaseContext dbContext, UserManager<UserEntity> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
-            _mailSender = mailSender;
         }
 
         public async Task Consume(ConsumeContext<LoginModel> context)
         {
-            var mail = new SendMailModel() { Receiver = "juliamos45@gmail.com", Subject = "Test", Body = "Test" };
-            var response = await _mailSender.GetResponse<ResponseEntity>(mail);
-
             UserEntity user = await _userManager.FindByNameAsync(context.Message.Email);
-            if (user != null && !user.Deleted && await _userManager.CheckPasswordAsync(user, context.Message.Password))
+            if (user != null && !user.Deleted && user.EmailConfirmed && await _userManager.CheckPasswordAsync(user, context.Message.Password))
             {
                 IList<string> userRoles = await _userManager.GetRolesAsync(user);
 

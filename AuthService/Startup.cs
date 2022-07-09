@@ -179,6 +179,7 @@ namespace AuthService
                     SecurityStamp = Guid.NewGuid().ToString(),
                     FirstName = "Admin",
                     LastName = "Admin",
+                    EmailConfirmed = true
                 };
 
 
