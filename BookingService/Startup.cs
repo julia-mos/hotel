@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppDbContext;
+using BookingService.Consumers;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,7 @@ namespace BookingService
 
             services.AddMassTransit(x =>
             {
-               // x.AddConsumer<SendMailConsumer>();
+                x.AddConsumer<GetFreeRoomsConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
