@@ -20,18 +20,21 @@ namespace hotel.Controllers
         readonly IRequestClient<RegisterModel> _registerClient;
         readonly IRequestClient<LoginModel> _loginClient;
         readonly IRequestClient<DeleteUserModel> _deleteClient;
+        readonly IRequestClient<VerifyEmailModel> _verifyEmailClient;
 
         public UserController(
             IRequestClient<UserListEntity> userClient,
             IRequestClient<RegisterModel> registerClient,
             IRequestClient<LoginModel> loginClient,
-             IRequestClient<DeleteUserModel> deleteClient
+            IRequestClient<DeleteUserModel> deleteClient,
+            IRequestClient<VerifyEmailModel> verifyEmailClient
         )
         {
             _userClient = userClient;
             _registerClient = registerClient;
             _loginClient = loginClient;
             _deleteClient = deleteClient;
+            _verifyEmailClient = verifyEmailClient;
         }
 
         [HttpPost]
@@ -103,6 +106,15 @@ namespace hotel.Controllers
             }
 
             var response = await _deleteClient.GetResponse<ResponseEntity>(new DeleteUserModel() { Id = id});
+
+            return StatusCode((int)response.Message.Code, response.Message.Message);
+        }
+
+        [HttpGet]
+        [Route("verify")]
+        public async Task<IActionResult> VerifyEmail(string userId, string token)
+        {
+            var response = await _verifyEmailClient.GetResponse<ResponseEntity>(new VerifyEmailModel() { Id = userId, token=token });
 
             return StatusCode((int)response.Message.Code, response.Message.Message);
         }

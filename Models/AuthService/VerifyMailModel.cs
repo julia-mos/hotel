@@ -1,10 +1,9 @@
 ﻿using System;
-namespace Models.AuthService
+namespace Models
 {
-    public class VerifyMailModel
+    public class VerifyEmailModel
     {
-        public VerifyMailModel()
-        {
-        }
+        public string Id { get; set; }
+        public string token { get; set; }
     }
 }

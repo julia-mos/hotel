@@ -77,6 +77,7 @@ namespace AuthService
                 x.AddConsumer<LoginConsumer>();
                 x.AddConsumer<RegisterConsumer>();
                 x.AddConsumer<DeleteUserConsumer>();
+                x.AddConsumer<VerifyEmailConsumer>();
 
                 x.AddRequestClient<SendMailModel>();
 

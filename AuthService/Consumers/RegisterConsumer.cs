@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using AppDbContext;
 using Entities;
@@ -60,10 +61,11 @@ namespace AuthService.Consumers
 
             string confirmationToken = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
 
+
             var mail = new SendMailModel() {
                 Receiver = context.Message.Email,
                 Subject = "HOTEL - confirm your email",
-                Body = $"<a href='http://localhost:8000/api/users/verify?userId={user.Id}&token={confirmationToken}'>Click on the link to verify your account</a>" };
+                Body = $"<a href='http://localhost:8000/api/users/verify?userId={user.Id}&token={Convert.ToBase64String(Encoding.UTF8.GetBytes(confirmationToken))}'>Click on the link to verify your account</a>" };
 
 
             await _mailSender.GetResponse<ResponseEntity>(mail);
