@@ -58,6 +58,17 @@ services:
       - mysql
       - rabbitmq
 
+  bookingsservice:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/BookingService/Dockerfile
+    depends_on:
+      - mysql
+      - rabbitmq
+      - authservice
+
   main:
     env_file:
       - .env
