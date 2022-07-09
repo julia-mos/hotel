@@ -28,6 +28,15 @@ services:
       - 5672:5672
       - 15672:15672
 
+  mailservice:
+    env_file:
+      - .env
+    build:
+      context: ..
+      dockerfile: ./hotel/MailService/Dockerfile
+    depends_on:
+      - rabbitmq
+
   authservice:
     env_file:
       - .env
@@ -37,6 +46,7 @@ services:
     depends_on:
       - mysql
       - rabbitmq
+      - mailservice
 
   roomservice:
     env_file:

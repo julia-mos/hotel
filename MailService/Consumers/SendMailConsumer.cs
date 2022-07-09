@@ -5,6 +5,7 @@ using Entities;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using Models;
 
@@ -12,6 +13,15 @@ namespace MailService
 {
     public class SendMailConsumer : IConsumer<SendMailModel>
     {
+
+        private readonly ILogger<SendMailConsumer> _logger;
+
+        public SendMailConsumer(ILogger<SendMailConsumer> logger)
+        {
+            _logger = logger;
+        }
+
+
         public async Task Consume(ConsumeContext<SendMailModel> context)
         {
             try
@@ -43,6 +53,8 @@ namespace MailService
 
             catch(Exception exc)
             {
+                _logger.LogError(exc.Message);
+
                 await context.RespondAsync(new ResponseEntity() { Code = HttpStatusCode.InternalServerError, Message = "Couldn't send email" });
             }
         }

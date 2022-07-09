@@ -20,6 +20,7 @@ namespace MailService
         {
             services.AddMassTransit(x =>
             {
+                x.AddConsumer<SendMailConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {

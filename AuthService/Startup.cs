@@ -15,6 +15,7 @@ using MassTransit;
 using AuthService.Consumers;
 using Entities;
 using AppDbContext;
+using Models;
 
 namespace AuthService
 {
@@ -76,6 +77,8 @@ namespace AuthService
                 x.AddConsumer<LoginConsumer>();
                 x.AddConsumer<RegisterConsumer>();
                 x.AddConsumer<DeleteUserConsumer>();
+
+                x.AddRequestClient<SendMailModel>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
