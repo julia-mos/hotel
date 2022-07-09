@@ -68,6 +68,8 @@ namespace RoomService.Consumers
                     .Select(x=> new GetRoomModel() {
                         Id = x.Id,
                         Name = x.Name,
+                        NoOfPeople = x.NoOfPeople,
+                        PriceForNight = x.PriceForNight,
                         Description = x.Description,
                         Count = x.Count,
                         Photos = x.Photos.Select(x=>x.Id).ToList()
@@ -82,18 +84,22 @@ namespace RoomService.Consumers
                     _dbContext
                     .Rooms
                     .Include(x=>x.Photos)
-                    .Where(x=>!x.Deleted && rooms.Exists(z => z.Id == x.Id))
+                    .Where(x=>!x.Deleted)
                     .Select(x => new GetRoomModel()
                     {
                         Id = x.Id,
                         Name = x.Name,
                         Description = x.Description,
+                        NoOfPeople = x.NoOfPeople,
+                        PriceForNight = x.PriceForNight,
                         Count = x.Count,
                         Photos = x.Photos.Select(x => x.Id).ToList()
                     })
                     .ToArrayAsync();
 
-                return roomsList;
+                var response = roomsList.Where(x => rooms.Exists(z => z.Id == x.Id)).ToArray();
+
+                return response;
             }
         }
     }
