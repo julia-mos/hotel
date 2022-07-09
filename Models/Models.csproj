@@ -11,10 +11,12 @@
     <None Remove="AuthService\" />
     <None Remove="RoomService\" />
     <None Remove="MediaService\" />
+    <None Remove="MailService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AuthService\" />
     <Folder Include="RoomService\" />
     <Folder Include="MediaService\" />
+    <Folder Include="MailService\" />
   </ItemGroup>
 </Project>

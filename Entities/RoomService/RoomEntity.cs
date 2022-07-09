@@ -10,6 +10,7 @@ namespace Entities
         public int NoOfPeople { get; set; }
         public decimal PriceForNight { get; set; }
         public bool Deleted { get; set; } = false;
+        public int Count { get; set; }
         public List<MediaEntity> Photos { get; set; }
     }
 }

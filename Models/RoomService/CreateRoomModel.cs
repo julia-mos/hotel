@@ -25,6 +25,10 @@ namespace Models
         [Range(1, 199999.99)]
         public decimal PriceForNight { get; set; }
 
+        [Required]
+        [Range(1, 10000)]
+        public int Count { get; set; }
+
         public List<MediaEntity> Files { get; set; }
     }
 }
