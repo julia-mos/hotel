@@ -67,6 +67,8 @@ namespace hotel
 
                 //booking clients
                 x.AddRequestClient<GetFreeRoomsModel>();
+                x.AddRequestClient<MakeBookingModel>();
+
             });
 
             services.AddMassTransitHostedService();
