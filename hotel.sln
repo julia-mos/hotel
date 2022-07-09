@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "Migrations\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailService", "MailService\MailService.csproj", "{7FA30F41-8787-40D1-B7FA-4891FBDCE5D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService", "BookingService\BookingService.csproj", "{B53C7EE6-6E27-45A4-83BF-ABD1958515B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{7FA30F41-8787-40D1-B7FA-4891FBDCE5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FA30F41-8787-40D1-B7FA-4891FBDCE5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FA30F41-8787-40D1-B7FA-4891FBDCE5D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B53C7EE6-6E27-45A4-83BF-ABD1958515B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53C7EE6-6E27-45A4-83BF-ABD1958515B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53C7EE6-6E27-45A4-83BF-ABD1958515B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B53C7EE6-6E27-45A4-83BF-ABD1958515B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

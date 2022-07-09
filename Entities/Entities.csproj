@@ -10,6 +10,7 @@
     <None Remove="AuthService\" />
     <None Remove="RoomService\" />
     <None Remove="MediaService\" />
+    <None Remove="BookingService\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -19,5 +20,6 @@
     <Folder Include="AuthService\" />
     <Folder Include="RoomService\" />
     <Folder Include="MediaService\" />
+    <Folder Include="BookingService\" />
   </ItemGroup>
 </Project>

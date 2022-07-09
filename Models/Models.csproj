@@ -12,11 +12,13 @@
     <None Remove="RoomService\" />
     <None Remove="MediaService\" />
     <None Remove="MailService\" />
+    <None Remove="BookingService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AuthService\" />
     <Folder Include="RoomService\" />
     <Folder Include="MediaService\" />
     <Folder Include="MailService\" />
+    <Folder Include="BookingService\" />
   </ItemGroup>
 </Project>
