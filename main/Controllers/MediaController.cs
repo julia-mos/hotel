@@ -27,6 +27,7 @@ namespace main.Controllers
             _logger = logger;
         }
 
+        [NonAction]
         public async Task<MediaEntity> UploadFileAsync(IFormFile file) {
             try
             {
