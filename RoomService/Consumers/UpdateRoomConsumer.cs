@@ -59,7 +59,7 @@ namespace RoomService.Consumers
 
                 if (context.Message.PriceForNight != null)
                 {
-                    room.PriceForNight = (decimal)context.Message.PriceForNight;
+                    room.PriceForNight = Math.Round((decimal)context.Message.PriceForNight,2);
                 }
 
                 await _dbContext.SaveChangesAsync();

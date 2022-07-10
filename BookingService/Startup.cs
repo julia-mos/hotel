@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Models;
 
 namespace BookingService
 {
@@ -38,6 +39,8 @@ namespace BookingService
                 x.AddConsumer<GetFreeRoomsConsumer>();
                 x.AddConsumer<MakeBookingConsumer>();
                 x.AddConsumer<GetBookingConsumer>();
+
+                x.AddRequestClient<SendMailModel>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {

@@ -44,7 +44,7 @@ namespace RoomService.Consumers
                     Name = context.Message.Name,
                     Description = context.Message.Description,
                     NoOfPeople = context.Message.NoOfPeople,
-                    PriceForNight = context.Message.PriceForNight,
+                    PriceForNight = Math.Round(context.Message.PriceForNight,2),
                     Count = context.Message.Count,
                     Photos = context.Message.Files
                 };
