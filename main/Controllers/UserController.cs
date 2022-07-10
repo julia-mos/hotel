@@ -8,6 +8,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.AuthService;
 
 namespace hotel.Controllers
 {
@@ -65,13 +66,19 @@ namespace hotel.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("{id}?")]
         [Authorize("Administrator")]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(string? id)
         {
             UserListEntity request = new UserListEntity() { users= new List<UserEntity>() { }};
 
-            var response = await _userClient.GetResponse<UserEntity[]>(request);
+
+            if(id != null)
+            {
+                request.users.Add(new UserEntity() { Id = id });
+            }
+
+            var response = await _userClient.GetResponse<GetUserModel[]>(request);
 
             return StatusCode(200, response.Message);
         }
@@ -88,7 +95,7 @@ namespace hotel.Controllers
                 }
             };
 
-            var response = await _userClient.GetResponse<UserEntity[]>(request);
+            var response = await _userClient.GetResponse<GetUserModel[]>(request);
 
             return StatusCode(200, response.Message);
         }

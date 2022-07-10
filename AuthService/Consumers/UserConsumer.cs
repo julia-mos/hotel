@@ -6,6 +6,7 @@ using Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models.AuthService;
 
 namespace AuthService.Consumers
 {
@@ -25,15 +26,25 @@ namespace AuthService.Consumers
         {
             if(context.Message.users==null || context.Message.users.Count == 0)
             {
-                var users = await _dbContext.Users.Where(x=>!x.Deleted).ToArrayAsync();
+                var users = await _dbContext
+                    .Users
+                    .Where(x=>!x.Deleted)
+                    .Select(x => new GetUserModel() { Id = x.Id, FirstName = x.FirstName, LastName = x.LastName, Email = x.Email })
+                    .ToArrayAsync();
 
                 await context.RespondAsync(users);
             }
             else
             {
-                var users = await _dbContext.Users.ToListAsync();
+                var users = await _dbContext
+                    .Users
+                    .Where(x=>!x.Deleted)
+                    .Select(x => new GetUserModel() { Id = x.Id, FirstName = x.FirstName, LastName = x.LastName, Email = x.Email })
+                    .ToListAsync();
 
-                var response = users.Where(x => context.Message.users.Exists(z => z.Id == x.Id) && !x.Deleted).ToArray();
+                var response = users
+                    .Where(x => context.Message.users.Exists(z => z.Id == x.Id))
+                    .ToArray();
 
                 await context.RespondAsync(response);
             }
