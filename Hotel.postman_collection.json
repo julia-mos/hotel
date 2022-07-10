@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "94ac705e-16ee-4f22-8b6b-f7a077737e54",
+		"name": "Hotel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"Email\":\"admin@houserent.pl\",\n   \"Password\":\"zaq1@WSX\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"Email\":\"test@wp.pl\",\n   \"LastName\":\"Test\",\n   \"FirstName\":\"Test\",\n   \"Password\":\"zaq1@WSX\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/users/2fc1990d-e293-4b25-8aeb-413eedf477a6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"2fc1990d-e293-4b25-8aeb-413eedf477a6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/users/bda61bc8-9d80-44d8-a1b6-9c0e08ee115a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"bda61bc8-9d80-44d8-a1b6-9c0e08ee115a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/users/verify?userId=8e341040-dfc7-4904-8b2d-dc60e4d05ef4&token=Q2ZESjhMWFNBbE5KOXdoR29MTlFkSUIzL3hIOUoyRlo4NUo3aWx5NFBaZENYYXJ5aHpPcXRUZFpFV0d1TGxiRjUvQWpadnRNSUVzSE13OGV2T2Nab2k4NGp0VEo2c3VHbGxMZEd1SE5TYlIwcFhrN2NFV216SnRHQk5vYVM5YU40M3lRZFlaUms5ZlhxUzNCMEtJNjcxT2tnbmkzR2h6dkZOa2svN3BsT21QOU4vMTFpZFh1NnVwRm5kZ0dzdXArd3VscUM1U3MrblduQVJFUXA5UGpjQmw1cWtJaGQvNkUwdG9CbURBS0RRbStKYkoxT1djbHdyOVNEN1hDYmFRVFdHTHltUT09",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "8e341040-dfc7-4904-8b2d-dc60e4d05ef4"
+								},
+								{
+									"key": "token",
+									"value": "Q2ZESjhMWFNBbE5KOXdoR29MTlFkSUIzL3hIOUoyRlo4NUo3aWx5NFBaZENYYXJ5aHpPcXRUZFpFV0d1TGxiRjUvQWpadnRNSUVzSE13OGV2T2Nab2k4NGp0VEo2c3VHbGxMZEd1SE5TYlIwcFhrN2NFV216SnRHQk5vYVM5YU40M3lRZFlaUms5ZlhxUzNCMEtJNjcxT2tnbmkzR2h6dkZOa2svN3BsT21QOU4vMTFpZFh1NnVwRm5kZ0dzdXArd3VscUM1U3MrblduQVJFUXA5UGpjQmw1cWtJaGQvNkUwdG9CbURBS0RRbStKYkoxT1djbHdyOVNEN1hDYmFRVFdHTHltUT09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rooms",
+			"item": [
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\":\"Hahaha\",\n    \"PriceForNight\":150.69\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/rooms/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"rooms",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/rooms/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"rooms",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"contentType": "",
+									"type": "file",
+									"src": [
+										"/Users/juliamos/Documents/Screenshot 2022-06-02 at 14.38.52.png",
+										"/Users/juliamos/Documents/Screenshot 2022-06-14 at 11.28.40.png",
+										"/Users/juliamos/Documents/Screenshot 2022-06-14 at 15.16.56.png"
+									]
+								},
+								{
+									"key": "Name",
+									"value": "Pokoj z fotkami",
+									"contentType": "",
+									"type": "text"
+								},
+								{
+									"key": "NoOfPeople",
+									"value": "5",
+									"type": "default"
+								},
+								{
+									"key": "Description",
+									"value": "Pokoj z fotkami",
+									"type": "default"
+								},
+								{
+									"key": "PriceForNight",
+									"value": "150",
+									"type": "default"
+								},
+								{
+									"key": "Count",
+									"value": "10",
+									"type": "default"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/rooms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/rooms/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"rooms",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Media",
+			"item": [
+				{
+					"name": "Get file",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/uploads/0bf26a71-4fb4-4d19-ace6-e1c1590746a2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"uploads",
+								"0bf26a71-4fb4-4d19-ace6-e1c1590746a2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "Get free rooms",
+					"protocolProfileBehavior": {
+						"disableUrlEncoding": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/bookings/free-rooms?dateFrom=20220713&dateTo=20220722&people=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bookings",
+								"free-rooms"
+							],
+							"query": [
+								{
+									"key": "dateFrom",
+									"value": "20220713"
+								},
+								{
+									"key": "dateTo",
+									"value": "20220722"
+								},
+								{
+									"key": "people",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Make booking",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/bookings?dateFrom=20220822&dateTo=20220827&people=2&roomId=11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bookings"
+							],
+							"query": [
+								{
+									"key": "dateFrom",
+									"value": "20220822"
+								},
+								{
+									"key": "dateTo",
+									"value": "20220827"
+								},
+								{
+									"key": "people",
+									"value": "2"
+								},
+								{
+									"key": "roomId",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my/all bookings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/bookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5NDNjMzJmLTk2YTktNDIxMS05MWFhLTkyMWYxYzVjZGVmYiIsInJvbGVzIjoiQWRtaW5pc3RyYXRvciIsImV4cCI6MTY1NzQ0MTY4OX0.QgK2Lg6921iMEcDY3rvc6PYUV4u3KfX_ajGt007408M",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
